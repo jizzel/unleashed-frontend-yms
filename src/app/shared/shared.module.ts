@@ -18,6 +18,12 @@ import {RouterLink} from "@angular/router";
     imports: [
         CommonModule,
         RouterLink
+    ],
+    exports: [
+        HeaderComponent,
+        FooterComponent,
+        LoaderComponent,
+        ErrorMessageComponent
     ]
 })
 export class SharedModule { }
