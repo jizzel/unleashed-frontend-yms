@@ -10,6 +10,7 @@ import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { reducers, metaReducers } from './reducers';
 import {environment} from '../environments/environment';
 import {SharedModule} from "./shared/shared.module";
+import {CoreModule} from './core/core.module';
 
 @NgModule({
   declarations: [
@@ -22,7 +23,8 @@ import {SharedModule} from "./shared/shared.module";
         EffectsModule.forRoot([]),
         StoreDevtoolsModule.instrument({maxAge: 25, logOnly: environment.production}),
         environment.production ? StoreDevtoolsModule.instrument() : [],
-        SharedModule
+        SharedModule,
+      CoreModule
     ],
   providers: [
     provideAnimationsAsync()
