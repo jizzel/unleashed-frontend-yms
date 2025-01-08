@@ -21,7 +21,7 @@ import {CoreModule} from './core/core.module';
         AppRoutingModule,
         StoreModule.forRoot(reducers, {metaReducers}),
         EffectsModule.forRoot([]),
-        StoreDevtoolsModule.instrument({maxAge: 25, logOnly: environment.production}),
+        StoreDevtoolsModule.instrument({name: 'unleashed', maxAge: 25, logOnly: environment.production}),
         environment.production ? StoreDevtoolsModule.instrument() : [],
         SharedModule,
       CoreModule
