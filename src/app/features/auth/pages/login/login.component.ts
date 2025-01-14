@@ -14,10 +14,6 @@ export class LoginComponent implements OnInit{
   constructor(private store: Store) { }
 
   ngOnInit(): void {
-    this.store.dispatch(
-      AuthActions.loginRequest({
-        credentials: {email: 'jizzeljee@gmail.com', password: '1e7xjr8i'}
-      })
-    );
+
   }
 }
