@@ -40,7 +40,7 @@
       <!-- Desktop Navigation -->
       <div class="hidden md:flex md:items-center md:space-x-6">
         <ng-container *ngIf="!isLoggedIn">
-          <a routerLink="/register" class="text-gray-700 hover:text-gray-900">Register</a>
+          <a routerLink="/forms/register" class="text-gray-700 hover:text-gray-900">Register</a>
           <a routerLink="/auth/login" class="px-4 py-2 rounded-md bg-blue-600 text-white hover:bg-blue-700">Login</a>
         </ng-container>
         <ng-container *ngIf="isLoggedIn">
@@ -57,7 +57,7 @@
     <div [class.hidden]="!isMenuOpen" class="md:hidden">
       <div class="px-2 pt-2 pb-3 space-y-1">
         <ng-container *ngIf="!isLoggedIn">
-          <a routerLink="/register" class="block px-3 py-2 rounded-md text-gray-700 hover:text-gray-900 hover:bg-gray-100">
+          <a routerLink="/forms/register" class="block px-3 py-2 rounded-md text-gray-700 hover:text-gray-900 hover:bg-gray-100">
             Register
           </a>
           <a routerLink="/auth/login" class="block px-3 py-2 rounded-md text-white bg-blue-600 hover:bg-blue-700">
