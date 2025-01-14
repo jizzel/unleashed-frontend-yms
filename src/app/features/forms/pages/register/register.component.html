@@ -1,0 +1,69 @@
+<div class="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
+  <div class="sm:mx-auto sm:w-full sm:max-w-md">
+    <h1 class="mt-6 text-center text-3xl font-extrabold text-gray-900">
+      Register for Form
+    </h1>
+  </div>
+
+  <div class="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
+    <mat-card class="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
+      <mat-card-content>
+        <form [formGroup]="registrationForm" (ngSubmit)="onSubmit()" class="space-y-6">
+          <mat-form-field class="w-full">
+            <mat-label>First Name</mat-label>
+            <input
+              matInput
+              formControlName="firstName"
+              type="text"
+              class="w-full"
+            />
+            <mat-error *ngIf="registrationForm.get('firstName')?.touched && registrationForm.get('firstName')?.invalid">
+              First name is required
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field class="w-full">
+            <mat-label>Email</mat-label>
+            <input
+              matInput
+              formControlName="email"
+              type="email"
+              class="w-full"
+            />
+            <mat-error *ngIf="registrationForm.get('email')?.touched && registrationForm.get('email')?.invalid">
+              Please enter a valid email
+            </mat-error>
+          </mat-form-field>
+
+          <div *ngIf="error$ | async as error" class="mt-2">
+            <mat-error>{{ error.message }}</mat-error>
+          </div>
+
+          <div *ngIf="registrationLink$ | async as link" class="mt-4 p-4 bg-green-50 rounded-md">
+            <p class="text-sm text-green-700">
+              Registration successful! Your form link:
+              <a [href]="link" class="font-medium underline">{{ link }}</a>
+            </p>
+          </div>
+
+          <button
+            mat-raised-button
+            color="primary"
+            type="submit"
+            [disabled]="registrationForm.invalid || (loading$ | async)"
+            class="w-full"
+          >
+            <mat-spinner
+              diameter="20"
+              *ngIf="loading$ | async; else submitText"
+              class="inline-block align-middle mr-2"
+            ></mat-spinner>
+            <ng-template #submitText>
+              Register
+            </ng-template>
+          </button>
+        </form>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>
