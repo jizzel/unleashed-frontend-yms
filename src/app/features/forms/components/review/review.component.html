@@ -1,0 +1,128 @@
+<div class="p-6 space-y-8">
+  <div *ngIf="form" class="divide-y divide-gray-200">
+    <!-- Personal Details -->
+    <div class="py-4">
+      <h3 class="text-lg font-semibold text-gray-900 mb-4">Personal Details</h3>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div class="space-y-1">
+          <p class="text-sm font-medium text-gray-500">Full Name</p>
+          <p class="text-base">{{form.personalDetails?.firstName}} {{form.personalDetails?.lastName}}</p>
+        </div>
+        <div class="space-y-1">
+          <p class="text-sm font-medium text-gray-500">Email</p>
+          <p class="text-base">{{form.personalDetails?.email}}</p>
+        </div>
+        <div class="space-y-1">
+          <p class="text-sm font-medium text-gray-500">Date of Birth</p>
+          <p class="text-base">{{form.personalDetails?.dateOfBirth | date}}</p>
+        </div>
+        <div class="space-y-1">
+          <p class="text-sm font-medium text-gray-500">Gender</p>
+          <p class="text-base">{{form.personalDetails?.gender}}</p>
+        </div>
+        <div class="space-y-1">
+          <p class="text-sm font-medium text-gray-500">Phone Number</p>
+          <p class="text-base">{{form.personalDetails?.phoneNumber}}</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Location & Background -->
+    <div class="py-4">
+      <h3 class="text-lg font-semibold text-gray-900 mb-4">Location & Background</h3>
+      <div class="space-y-4">
+        <div class="space-y-1">
+          <p class="text-sm font-medium text-gray-500">Languages Spoken</p>
+          <div class="flex flex-wrap gap-2">
+                <span
+                  *ngFor="let language of form.locationDetails?.languagesSpoken"
+                  class="px-2 py-1 bg-blue-100 text-blue-800 rounded-full text-sm"
+                >
+                  {{language}}
+                </span>
+          </div>
+        </div>
+        <div class="space-y-1">
+          <p class="text-sm font-medium text-gray-500">Address</p>
+          <p class="text-base whitespace-pre-line">{{form.locationDetails?.address}}</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Professional Details -->
+    <div class="py-4">
+      <h3 class="text-lg font-semibold text-gray-900 mb-4">Professional Details</h3>
+      <div class="space-y-4">
+        <div class="space-y-1">
+          <p class="text-sm font-medium text-gray-500">Occupation</p>
+          <p class="text-base">{{form.professionalDetails?.occupation}}</p>
+        </div>
+        <div class="space-y-1">
+          <p class="text-sm font-medium text-gray-500">Skills</p>
+          <div class="flex flex-wrap gap-2">
+                <span
+                  *ngFor="let skill of form.professionalDetails?.skills"
+                  class="px-2 py-1 bg-green-100 text-green-800 rounded-full text-sm"
+                >
+                  {{skill}}
+                </span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Spiritual Journey -->
+    <div class="py-4">
+      <h3 class="text-lg font-semibold text-gray-900 mb-4">Spiritual Journey</h3>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div class="space-y-1">
+          <p class="text-sm font-medium text-gray-500">Born Again</p>
+          <p class="text-base">{{form.spiritualDetails?.bornAgain ? 'Yes' : 'No'}}</p>
+        </div>
+        <div class="space-y-1">
+          <p class="text-sm font-medium text-gray-500">Baptized</p>
+          <p class="text-base">{{form.spiritualDetails?.baptized ? 'Yes' : 'No'}}</p>
+        </div>
+        <div class="space-y-1" *ngIf="form.spiritualDetails?.baptized">
+          <p class="text-sm font-medium text-gray-500">Type of Baptism</p>
+          <p class="text-base">{{form.spiritualDetails?.baptismType}}</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Emergency Contact -->
+    <div class="py-4">
+      <h3 class="text-lg font-semibold text-gray-900 mb-4">Emergency Contact</h3>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div class="space-y-1">
+          <p class="text-sm font-medium text-gray-500">Contact Name</p>
+          <p class="text-base">{{form.emergencyContact?.name}}</p>
+        </div>
+        <div class="space-y-1">
+          <p class="text-sm font-medium text-gray-500">Relationship</p>
+          <p class="text-base">{{form.emergencyContact?.relationship}}</p>
+        </div>
+        <div class="space-y-1">
+          <p class="text-sm font-medium text-gray-500">Phone Number</p>
+          <p class="text-base">{{form.emergencyContact?.phoneNumber}}</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Additional Information -->
+    <div class="py-4" *ngIf="form.additionalInfo?.comments">
+      <h3 class="text-lg font-semibold text-gray-900 mb-4">Additional Information</h3>
+      <div class="space-y-1">
+        <p class="text-sm font-medium text-gray-500">Comments</p>
+        <p class="text-base whitespace-pre-line">{{form.additionalInfo?.comments}}</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Consent Message -->
+  <div class="bg-blue-50 border border-blue-200 rounded-lg p-4">
+    <p class="text-sm text-blue-800">
+      Please review all information carefully. By submitting this form, you confirm that all provided information is accurate and complete.
+    </p>
+  </div>
+</div>

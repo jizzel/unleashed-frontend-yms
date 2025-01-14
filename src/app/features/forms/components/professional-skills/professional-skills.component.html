@@ -1,1 +1,72 @@
-<p>professional-skills works!</p>
+<form [formGroup]="form" class="p-6 space-y-6">
+  <!-- Occupation -->
+  <mat-form-field appearance="fill" class="w-full">
+    <mat-label>Occupation/Profession</mat-label>
+    <input
+      matInput
+      formControlName="occupation"
+      placeholder="e.g., Software Engineer, Teacher, Business Owner"
+    >
+    <mat-error *ngIf="form.get('occupation')?.errors?.['required']">
+      Occupation is required
+    </mat-error>
+  </mat-form-field>
+
+  <!-- Skills -->
+  <div class="w-full">
+    <label class="text-gray-700 text-sm font-medium mb-2 block">
+      Skills/Areas of Expertise
+    </label>
+    <mat-form-field appearance="fill" class="w-full">
+      <mat-chip-grid #chipList>
+        <mat-chip
+          *ngFor="let skill of skills"
+          [removable]="true"
+          (removed)="removeSkill(skill)"
+        >
+          {{skill}}
+          <mat-icon matChipRemove>cancel</mat-icon>
+        </mat-chip>
+        <input
+          placeholder="Add skill (press Enter)"
+          [matChipInputFor]="chipList"
+          [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+          [matChipInputAddOnBlur]="true"
+          (matChipInputTokenEnd)="addSkill($event)"
+        >
+      </mat-chip-grid>
+      <mat-hint>Press Enter or comma to add each skill</mat-hint>
+      <mat-error *ngIf="skills.length === 0">
+        At least one skill is required
+      </mat-error>
+    </mat-form-field>
+  </div>
+
+  <!-- Action Buttons -->
+  <div class="flex flex-col sm:flex-row gap-4 pt-4">
+    <button
+      mat-stroked-button
+      type="button"
+      class="flex-1"
+      matStepperPrevious
+    >
+      Previous
+    </button>
+    <button
+      mat-flat-button
+      color="primary"
+      class="flex-1"
+      [disabled]="!isValid || form.pristine"
+      (click)="onSave()"
+    >
+      <mat-spinner
+        diameter="20"
+        *ngIf="isLoading$ | async; else saveInfo"
+        class="inline-block align-middle mr-2"
+      ></mat-spinner>
+      <ng-template #saveInfo>
+        Save & Continue
+      </ng-template>
+    </button>
+  </div>
+</form>

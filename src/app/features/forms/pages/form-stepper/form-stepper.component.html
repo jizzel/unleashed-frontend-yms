@@ -1,1 +1,163 @@
-<p>form-stepper works!</p>
+<div class="min-h-screen bg-gray-50">
+  <!-- Header with progress -->
+  <div class="sticky top-0 z-10 bg-white shadow-sm">
+    <div class="container mx-auto px-4 py-4">
+      <div class="flex flex-col gap-2">
+        <h1 class="text-2xl font-bold text-gray-900">Membership Form</h1>
+        <div class="flex items-center gap-2">
+          <mat-progress-bar
+            [value]="formCompletion$ | async"
+            class="flex-grow"
+          ></mat-progress-bar>
+          <span class="text-sm text-gray-600">
+                {{ formCompletion$ | async }}% Complete
+              </span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Loader -->
+  <app-loader [isLoading]="isLoading$ | async" message="Saving..."></app-loader>
+
+  <!-- Main content -->
+  <div class="container mx-auto px-4 py-8">
+    <!-- Show stepper only if form is not submitted -->
+    <ng-container *ngIf="(currentForm$ | async)?.status !== 'SUBMITTED'; else submittedTemplate">
+      <mat-stepper
+      #stepper
+      [orientation]="(isSmallScreen$ | async) ? 'vertical' : 'horizontal'"
+      class="bg-white rounded-lg shadow-lg"
+      [linear]="true"
+    >
+      <!-- Personal Details -->
+      <mat-step [completed]="isStepComplete('personalDetails')">
+        <ng-template matStepLabel>Personal Details</ng-template>
+        <app-personal-details
+          [data]="(currentForm$ | async)?.personalDetails"
+          (save)="onSaveSectionDetails($event, FormSectionType.PERSONAL_DETAILS)"
+        ></app-personal-details>
+      </mat-step>
+
+      <!-- Location & Background -->
+      <mat-step [completed]="isStepComplete('locationDetails')">
+        <ng-template matStepLabel>Location & Background</ng-template>
+        <app-location-background
+          [data]="(currentForm$ | async)?.locationDetails"
+          (save)="onSaveSectionDetails($event, FormSectionType.LOCATION_DETAILS)"
+        ></app-location-background>
+      </mat-step>
+
+      <!-- Professional Skills -->
+      <mat-step [completed]="isStepComplete('professionalDetails')">
+        <ng-template matStepLabel>Professional Skills</ng-template>
+        <app-professional-skills
+          [data]="(currentForm$ | async)?.professionalDetails"
+          (save)="onSaveSectionDetails($event, FormSectionType.PROFESSIONAL_DETAILS)"
+        ></app-professional-skills>
+      </mat-step>
+
+      <!-- Spiritual Journey -->
+      <mat-step [completed]="isStepComplete('spiritualDetails')">
+        <ng-template matStepLabel>Spiritual Journey</ng-template>
+        <app-spiritual-journey
+          [data]="(currentForm$ | async)?.spiritualDetails"
+          (save)="onSaveSectionDetails($event, FormSectionType.SPIRITUAL_DETAILS)"
+        ></app-spiritual-journey>
+      </mat-step>
+
+      <!-- Emergency Contact -->
+      <mat-step [completed]="isStepComplete('emergencyContact')">
+        <ng-template matStepLabel>Emergency Contact</ng-template>
+        <app-emergency-contact
+          [data]="(currentForm$ | async)?.emergencyContact"
+          (save)="onSaveSectionDetails($event, FormSectionType.EMERGENCY_CONTACT)"
+        ></app-emergency-contact>
+      </mat-step>
+
+      <!-- Additional Info -->
+      <mat-step [completed]="isStepComplete('additionalInfo')">
+        <ng-template matStepLabel>Additional Info</ng-template>
+        <app-additional-info
+          [data]="(currentForm$ | async)?.additionalInfo"
+          (save)="onSaveSectionDetails($event, FormSectionType.ADDITIONAL_INFO)"
+        ></app-additional-info>
+      </mat-step>
+
+      <!-- Review & Submit -->
+      <mat-step>
+        <ng-template matStepLabel>Review & Submit</ng-template>
+        <div class="p-6">
+          <h2 class="text-xl font-semibold mb-4">Review Your Information</h2>
+          <div class="mb-6">
+            <app-review [form]="(currentForm$ | async)"></app-review>
+            <p class="text-gray-600">
+              Please review all the information you've provided. Once submitted, you won't be able to make changes.
+            </p>
+          </div>
+
+          <div class="flex flex-col sm:flex-row gap-4">
+            <button
+              mat-flat-button
+              color="primary"
+              [disabled]="!(canSubmit$ | async)"
+              (click)="onSubmit()"
+              class="flex-1"
+            >
+              Submit Form
+            </button>
+            <button
+              mat-stroked-button
+              (click)="stepper.previous()"
+              class="flex-1"
+            >
+              Go Back
+            </button>
+          </div>
+        </div>
+      </mat-step>
+    </mat-stepper>
+    </ng-container>
+
+    <!-- Template for submitted forms -->
+    <ng-template #submittedTemplate>
+      <div class="container mx-auto px-4 py-16">
+        <div class="max-w-2xl mx-auto bg-white rounded-lg shadow-lg p-8 text-center">
+          <div class="mb-6">
+            <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+              <svg class="w-8 h-8 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+              </svg>
+            </div>
+            <h2 class="text-2xl font-bold text-gray-900 mb-2">Form Successfully Submitted</h2>
+            <p class="text-gray-600 mb-4">Thank you for completing the membership form.</p>
+
+            <ng-container *ngIf="currentForm$ | async as form">
+              <div class="bg-gray-50 rounded p-4 mb-4">
+                <p class="text-sm text-gray-500">Submission Date</p>
+                <p class="text-gray-900 font-medium">
+                  {{form.submissionDate | date:'medium'}}
+                </p>
+              </div>
+            </ng-container>
+
+            <div class="prose prose-sm max-w-none text-gray-500">
+              <p>Your form has been received and is currently under review. You will be notified via email once it has been processed.</p>
+            </div>
+          </div>
+
+          <div class="flex flex-col sm:flex-row gap-4 justify-center">
+            <a
+              mat-flat-button
+              color="primary"
+              routerLink="/"
+              class="flex-grow-0"
+            >
+              Return to Home
+            </a>
+          </div>
+        </div>
+      </div>
+    </ng-template>
+  </div>
+</div>

@@ -1,1 +1,41 @@
-<p>additional-info works!</p>
+<form [formGroup]="form" class="p-6 space-y-6">
+  <!-- Comments -->
+  <mat-form-field appearance="fill" class="w-full">
+    <mat-label>Additional Comments</mat-label>
+    <textarea
+      matInput
+      formControlName="comments"
+      placeholder="Share any additional information, interests, or preferences"
+      rows="4"
+    ></textarea>
+    <mat-hint>Optional - Share any additional information you'd like us to know</mat-hint>
+  </mat-form-field>
+
+  <!-- Action Buttons -->
+  <div class="flex flex-col sm:flex-row gap-4 pt-4">
+    <button
+      mat-stroked-button
+      type="button"
+      class="flex-1"
+      matStepperPrevious
+    >
+      Previous
+    </button>
+    <button
+      mat-flat-button
+      color="primary"
+      class="flex-1"
+      [disabled]="!form.valid || form.pristine"
+      (click)="onSave()"
+    >
+      <mat-spinner
+        diameter="20"
+        *ngIf="isLoading$ | async; else saveInfo"
+        class="inline-block align-middle mr-2"
+      ></mat-spinner>
+      <ng-template #saveInfo>
+        Save & Continue
+      </ng-template>
+    </button>
+  </div>
+</form>

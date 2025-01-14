@@ -1,1 +1,70 @@
-<p>location-background works!</p>
+<form [formGroup]="form" class="p-6 space-y-6">
+  <!-- Languages -->
+  <div class="w-full">
+    <label class="text-gray-700 text-sm font-medium mb-2 block">Languages Spoken</label>
+    <mat-form-field appearance="fill" class="w-full">
+      <mat-chip-grid #chipList>
+        <mat-chip
+          *ngFor="let language of languages"
+          [removable]="true"
+          (removed)="removeLanguage(language)"
+        >
+          {{language}}
+          <mat-icon matChipRemove>cancel</mat-icon>
+        </mat-chip>
+        <input
+          placeholder="Add language..."
+          [matChipInputFor]="chipList"
+          [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+          [matChipInputAddOnBlur]="true"
+          (matChipInputTokenEnd)="addLanguage($event)"
+        >
+      </mat-chip-grid>
+      <mat-error *ngIf="languages.length === 0">
+        At least one language is required
+      </mat-error>
+    </mat-form-field>
+  </div>
+
+  <!-- Address -->
+  <mat-form-field appearance="fill" class="w-full">
+    <mat-label>Address/Area of Residence</mat-label>
+    <textarea
+      matInput
+      formControlName="address"
+      placeholder="Enter your address"
+      rows="3"
+    ></textarea>
+    <mat-error *ngIf="form.get('address')?.errors?.['required']">
+      Address is required
+    </mat-error>
+  </mat-form-field>
+
+  <!-- Action Buttons -->
+  <div class="flex flex-col sm:flex-row gap-4 pt-4">
+    <button
+      mat-stroked-button
+      type="button"
+      class="flex-1"
+      matStepperPrevious
+    >
+      Previous
+    </button>
+    <button
+      mat-flat-button
+      color="primary"
+      class="flex-1"
+      [disabled]="!isValid || form.pristine"
+      (click)="onSave()"
+    >
+      <mat-spinner
+        diameter="20"
+        *ngIf="isLoading$ | async; else saveInfo"
+        class="inline-block align-middle mr-2"
+      ></mat-spinner>
+      <ng-template #saveInfo>
+        Save & Continue
+      </ng-template>
+    </button>
+  </div>
+</form>

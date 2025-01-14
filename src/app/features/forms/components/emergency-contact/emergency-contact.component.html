@@ -1,1 +1,73 @@
-<p>emergency-contact works!</p>
+<form [formGroup]="form" class="p-6 space-y-6">
+  <!-- Contact Name -->
+  <mat-form-field appearance="fill" class="w-full">
+    <mat-label>Emergency Contact Name</mat-label>
+    <input
+      matInput
+      formControlName="name"
+      placeholder="Full name of emergency contact"
+    >
+    <mat-error *ngIf="form.get('name')?.errors?.['required']">
+      Contact name is required
+    </mat-error>
+  </mat-form-field>
+
+  <!-- Relationship -->
+  <mat-form-field appearance="fill" class="w-full">
+    <mat-label>Relationship</mat-label>
+    <mat-select formControlName="relationship">
+      <mat-option value="Parent">Parent</mat-option>
+      <mat-option value="Spouse">Spouse</mat-option>
+      <mat-option value="Sibling">Sibling</mat-option>
+      <mat-option value="Friend">Friend</mat-option>
+      <mat-option value="Other">Other</mat-option>
+    </mat-select>
+    <mat-error *ngIf="form.get('relationship')?.errors?.['required']">
+      Relationship is required
+    </mat-error>
+  </mat-form-field>
+
+  <!-- Phone Number -->
+  <mat-form-field appearance="fill" class="w-full">
+    <mat-label>Emergency Contact Phone</mat-label>
+    <input
+      matInput
+      formControlName="phoneNumber"
+      placeholder="Emergency contact phone number"
+    >
+    <mat-error *ngIf="form.get('phoneNumber')?.errors?.['required']">
+      Phone number is required
+    </mat-error>
+    <mat-error *ngIf="form.get('phoneNumber')?.errors?.['pattern']">
+      Please enter a valid phone number
+    </mat-error>
+  </mat-form-field>
+
+  <!-- Action Buttons -->
+  <div class="flex flex-col sm:flex-row gap-4 pt-4">
+    <button
+      mat-stroked-button
+      type="button"
+      class="flex-1"
+      matStepperPrevious
+    >
+      Previous
+    </button>
+    <button
+      mat-flat-button
+      color="primary"
+      class="flex-1"
+      [disabled]="!form.valid || form.pristine"
+      (click)="onSave()"
+    >
+      <mat-spinner
+        diameter="20"
+        *ngIf="isLoading$ | async; else saveInfo"
+        class="inline-block align-middle mr-2"
+      ></mat-spinner>
+      <ng-template #saveInfo>
+        Save & Continue
+      </ng-template>
+    </button>
+  </div>
+</form>

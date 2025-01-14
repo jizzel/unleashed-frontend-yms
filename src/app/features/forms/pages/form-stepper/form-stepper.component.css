@@ -1,0 +1,11 @@
+::ng-deep .mat-horizontal-stepper-header-container {
+  @apply px-4;
+}
+
+::ng-deep .mat-horizontal-content-container {
+  @apply p-0;
+}
+
+::ng-deep .mat-vertical-content {
+  @apply p-0;
+}

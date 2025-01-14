@@ -1,1 +1,64 @@
-<p>spiritual-journey works!</p>
+<form [formGroup]="form" class="p-6 space-y-6">
+  <!-- Born Again -->
+  <div class="space-y-2">
+    <label class="text-gray-700 text-sm font-medium block">
+      Are you born again?
+    </label>
+    <mat-radio-group formControlName="bornAgain" class="flex flex-col gap-2">
+      <mat-radio-button [value]="true">Yes</mat-radio-button>
+      <mat-radio-button [value]="false">No</mat-radio-button>
+    </mat-radio-group>
+    <mat-error *ngIf="form.get('bornAgain')?.errors?.['required']" class="text-sm">
+      Please select an option
+    </mat-error>
+  </div>
+
+  <!-- Baptized -->
+  <div class="space-y-2">
+    <label class="text-gray-700 text-sm font-medium block">
+      Have you been baptized?
+    </label>
+    <mat-radio-group formControlName="baptized" class="flex flex-col gap-2">
+      <mat-radio-button [value]="true">Yes</mat-radio-button>
+      <mat-radio-button [value]="false">No</mat-radio-button>
+    </mat-radio-group>
+    <mat-error *ngIf="form.get('baptized')?.errors?.['required']" class="text-sm">
+      Please select an option
+    </mat-error>
+  </div>
+
+  <!-- Baptism Type -->
+  <div class="space-y-2" *ngIf="form.get('baptized')?.value">
+    <mat-form-field appearance="fill" class="w-full">
+      <mat-label>Type of Baptism</mat-label>
+      <mat-select formControlName="baptismType">
+        <mat-option value="Water">Water Baptism</mat-option>
+        <mat-option value="Holy Spirit">Holy Spirit Baptism</mat-option>
+      </mat-select>
+      <mat-error *ngIf="form.get('baptismType')?.errors?.['required']">
+        Please select the type of baptism
+      </mat-error>
+    </mat-form-field>
+  </div>
+
+  <!-- Action Buttons -->
+  <div class="flex flex-col sm:flex-row gap-4 pt-4">
+    <button
+      mat-stroked-button
+      type="button"
+      class="flex-1"
+      matStepperPrevious
+    >
+      Previous
+    </button>
+    <button
+      mat-flat-button
+      color="primary"
+      class="flex-1"
+
+      (click)="onSave()"
+    >
+      Save & Continue
+    </button>
+  </div>
+</form>
