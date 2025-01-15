@@ -34,6 +34,7 @@ export abstract class BaseApiService<T> {
       };
     } else {
       // Server-side error
+      console.error('Server error:', error);
       apiError = {
         message: error.error?.error || 'An unexpected error occurred',
         code: error.error?.code || 'SERVER_ERROR',

@@ -2,12 +2,13 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { BaseApiService } from './base-api.service';
 import { LoginRequest, AuthResponse } from '../models/auth.interface';
+import {Router} from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService extends BaseApiService<AuthResponse> {
-  constructor() {
+  constructor(private router: Router) {
     super('admins');
   }
 
@@ -19,8 +20,10 @@ export class AuthService extends BaseApiService<AuthResponse> {
     return this.post('refresh-token', { token });
   }
 
-  logout(): Observable<AuthResponse> {
-    return this.post('logout', {});
+  logout(){
+    localStorage.clear();
+    this.router.navigate(['/auth/login']);
+    // return this.post('logout', {refresh_token: this.getRefreshToken()});
   }
 
   // Helper methods for token management

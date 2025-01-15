@@ -1,9 +1,9 @@
 import {inject, Injectable} from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
-import {catchError, map, concatMap, exhaustMap, tap} from 'rxjs/operators';
+import {catchError, map, exhaustMap, tap} from 'rxjs/operators';
 import { of } from 'rxjs';
 import { AuthActions } from '../actions/auth.actions';
-import {AuthService} from '../../../../core/services/auth.service';
+import { AuthService } from '../../../../core/services/auth.service';
 import {Router} from '@angular/router';
 
 
@@ -15,15 +15,6 @@ export class AuthEffects {
     private readonly authService: AuthService,
     private readonly router: Router
   ) {}
-
-  // Move effects definitions after constructor
-  log$ = createEffect(() =>
-      this.actions$.pipe(
-        ofType(AuthActions.loginRequest),
-        tap(action => console.log('joe::loginRequest', action))
-      ),
-    { dispatch: false }
-  );
 
 
   login$ = createEffect(() => this.actions$.pipe(
@@ -59,14 +50,12 @@ export class AuthEffects {
 
   logout$ = createEffect(() => this.actions$.pipe(
     ofType(AuthActions.logoutRequest),
-    exhaustMap(() => this.authService.logout().pipe(
-        map(() => {
-          this.authService.clearTokens();
-          return AuthActions.logoutSuccess();
-        }),
-        catchError(error => of(AuthActions.logoutFailure({ error })))
-      )
-    )
+    map(() => {
+      this.authService.logout();
+      this.authService.clearTokens();
+      return AuthActions.logoutSuccess();
+    }),
+    catchError(error => of(AuthActions.logoutFailure({ error })))
   ));
 
   logoutSuccess$ = createEffect(() => this.actions$.pipe(
