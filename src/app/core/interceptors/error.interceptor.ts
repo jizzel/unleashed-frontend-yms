@@ -9,10 +9,10 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
 
   return next(req).pipe(
     catchError((error: HttpErrorResponse) => {
-      if ([401, 403].includes(error.status)) {
+      if ([403].includes(error.status)) {
         // Clear storage and redirect to login
         localStorage.clear();
-        router.navigate(['/login']);
+        router.navigate(['/auth/login']);
       }
 
       return throwError(() => error);
