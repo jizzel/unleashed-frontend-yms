@@ -1,5 +1,5 @@
 import {Component, EventEmitter, inject, Input, Output} from '@angular/core';
-import {PersonalDetails, ProfessionalDetails} from '../../../../core/models/form.interface';
+import {ProfessionalDetails} from '../../../../core/models/form.interface';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {MatChipInputEvent} from '@angular/material/chips';
 import {COMMA, ENTER} from '@angular/cdk/keycodes';
