@@ -12,7 +12,7 @@ export abstract class BaseApiService<T> {
 
   constructor(protected endpoint: string) {
     this.baseUrl = `${environment.apiUrl}/${endpoint}`;
-    console.log('BaseApiService', this.baseUrl);
+    // console.log('BaseApiService', this.baseUrl);
   }
 
   protected getHeaders(): HttpHeaders {
