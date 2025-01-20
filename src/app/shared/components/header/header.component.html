@@ -39,11 +39,11 @@
 
       <!-- Desktop Navigation -->
       <div class="hidden md:flex md:items-center md:space-x-6">
-        <ng-container *ngIf="!isLoggedIn">
+        <ng-container *ngIf="!(isLoggedIn$  | async)">
           <a routerLink="/forms/register" class="text-gray-700 hover:text-gray-900">Register</a>
           <a routerLink="/auth/login" class="px-4 py-2 rounded-md bg-blue-600 text-white hover:bg-blue-700">Login</a>
         </ng-container>
-        <ng-container *ngIf="isLoggedIn">
+        <ng-container *ngIf="isLoggedIn$  | async">
           <a routerLink="/admin/dashboard" class="text-gray-700 hover:text-gray-900">Dashboard</a>
           <a routerLink="/admin/profile" class="text-gray-700 hover:text-gray-900">Profile</a>
           <button (click)="logout()" class="px-4 py-2 rounded-md bg-red-600 text-white hover:bg-red-700">
@@ -56,7 +56,7 @@
     <!-- Mobile Navigation -->
     <div [class.hidden]="!isMenuOpen" class="md:hidden">
       <div class="px-2 pt-2 pb-3 space-y-1">
-        <ng-container *ngIf="!isLoggedIn">
+        <ng-container *ngIf="!(isLoggedIn$  | async)">
           <a routerLink="/forms/register" class="block px-3 py-2 rounded-md text-gray-700 hover:text-gray-900 hover:bg-gray-100">
             Register
           </a>
@@ -64,7 +64,7 @@
             Login
           </a>
         </ng-container>
-        <ng-container *ngIf="isLoggedIn">
+        <ng-container *ngIf="isLoggedIn$ | async">
           <a routerLink="/admin/dashboard" class="block px-3 py-2 rounded-md text-gray-700 hover:text-gray-900 hover:bg-gray-100">
             Dashboard
           </a>

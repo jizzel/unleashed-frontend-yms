@@ -28,5 +28,10 @@ export interface AuthResponse {
 export enum UserRole {
   ADMIN = 'ADMIN',
   VIEWER = 'VIEWER',
-  USER = 'USER'
+  USER = 'USER',
+  EDITOR = 'EDITOR'
+}
+
+export interface RouteData {
+  roles?: UserRole[];
 }

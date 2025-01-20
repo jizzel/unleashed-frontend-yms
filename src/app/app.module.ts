@@ -11,6 +11,7 @@ import { reducers, metaReducers } from './reducers';
 import {environment} from '../environments/environment';
 import {SharedModule} from "./shared/shared.module";
 import {CoreModule} from './core/core.module';
+import {AuthEffects} from './features/auth/store/effects/auth.effects';
 
 @NgModule({
   declarations: [
@@ -20,7 +21,7 @@ import {CoreModule} from './core/core.module';
         BrowserModule,
         AppRoutingModule,
         StoreModule.forRoot(reducers, {metaReducers}),
-        EffectsModule.forRoot([]),
+        EffectsModule.forRoot([AuthEffects]),
         StoreDevtoolsModule.instrument({name: 'unleashed', maxAge: 25, logOnly: environment.production}),
         environment.production ? StoreDevtoolsModule.instrument() : [],
         SharedModule,

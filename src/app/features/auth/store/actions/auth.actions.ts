@@ -1,6 +1,7 @@
 import { createActionGroup, emptyProps, props } from '@ngrx/store';
-import {AuthResponse, LoginRequest} from '../../../../core/models/auth.interface';
+import {AuthResponse, LoginRequest, User} from '../../../../core/models/auth.interface';
 import {ApiError} from '../../../../core/models/error.interface';
+import {State} from '../reducers/auth.reducer';
 
 export const AuthActions = createActionGroup({
   source: 'Auth',
@@ -21,6 +22,23 @@ export const AuthActions = createActionGroup({
     'Logout Success': emptyProps(),
     'Logout Failure': props<{ error: ApiError }>(),
 
+    // Update User
+    'Update User Info': props<{ user: Partial<User> }>(),
+    'Update User Success': props<{ user: User }>(),
+    'Update User Failure': props<{ error: ApiError }>(),
+
+    // Navigation
+    'Set Return URL': props<{ url: string }>(),
+
     'Clear Error': emptyProps(),
+    'Reset Login Attempts': emptyProps(),
+
+    // hydrate state
+    'hydrate AuthState': emptyProps(),
+    'hydrate AuthState Success': props<{ state: Partial<State> }>(),
+    'hydrate AuthState Failure': emptyProps(),
+
+    // Clear State
+    'Clear AuthState': emptyProps()
   }
 });

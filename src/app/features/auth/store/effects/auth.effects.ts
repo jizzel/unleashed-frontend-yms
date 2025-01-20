@@ -1,17 +1,22 @@
 import {inject, Injectable} from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
-import {catchError, map, exhaustMap, tap} from 'rxjs/operators';
+import {catchError, map, exhaustMap, tap, withLatestFrom} from 'rxjs/operators';
 import { of } from 'rxjs';
 import { AuthActions } from '../actions/auth.actions';
 import { AuthService } from '../../../../core/services/auth.service';
 import {Router} from '@angular/router';
+import {selectAuthState, selectReturnUrl} from '../selectors/auth.selectors';
+import {Store} from '@ngrx/store';
+import {StorageService} from '../../../../core/services/storage.service';
 
 
 @Injectable()
 export class AuthEffects {
   private actions$ = inject(Actions);
+  private store = inject(Store);
 
   constructor(
+    private readonly storageService: StorageService,
     private readonly authService: AuthService,
     private readonly router: Router
   ) {}
@@ -32,7 +37,11 @@ export class AuthEffects {
 
   loginSuccess$ = createEffect(() => this.actions$.pipe(
     ofType(AuthActions.loginSuccess),
-    tap(() => this.router.navigate(['/admin/dashboard']))
+    withLatestFrom(this.store.select(selectReturnUrl)),
+    tap(([_, returnUrl]) => {
+      const url = returnUrl || '/admin/dashboard';
+      this.router.navigate([url]);
+    })
   ), { dispatch: false });
 
   refreshToken$ = createEffect(() => this.actions$.pipe(
@@ -60,6 +69,37 @@ export class AuthEffects {
 
   logoutSuccess$ = createEffect(() => this.actions$.pipe(
     ofType(AuthActions.logoutSuccess),
-    tap(() => this.router.navigate(['/login']))
+    tap(() => this.router.navigate(['/auth/login']))
+  ), { dispatch: false });
+
+  // hydrate auth state on app init from local storage
+  hydrateAuth$ = createEffect(() => this.actions$.pipe(
+    ofType(AuthActions.hydrateAuthState),
+    map(() => {
+      const token = this.storageService.getAccessToken();
+      if (!token) {
+        return AuthActions.clearAuthState();
+      }
+      // const user = this.authService.getCurrentUser();
+      const authState = this.storageService.getAuthState();
+      return AuthActions.hydrateAuthStateSuccess(authState);
+    })
+  ));
+
+  // persist auth state to local storage when auth state changes
+  persistAuthState$ = createEffect(() => this.actions$.pipe(
+    ofType(
+      AuthActions.loginSuccess,
+      AuthActions.refreshTokenSuccess,
+    ),
+    tap((action) => {
+      console.log(action);
+      if ('user' in action){
+        this.storageService.setUserData(action['user']);
+        this.storageService.setAuthState({...action});
+      }
+      // const state = this.store.select(selectAuthState);
+      // this.storageService.setAuthState(state);
+    })
   ), { dispatch: false });
 }

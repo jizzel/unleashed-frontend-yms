@@ -10,13 +10,19 @@ export interface State {
   tokens: AuthResponse['token'] | null;
   loading: boolean;
   error: ApiError | null;
+  returnUrl: string | null;
+  lastLogin: Date | null;
+  loginAttempts: number;
 }
 
 export const initialState: State = {
   user: null,
   tokens: null,
   loading: false,
-  error: null
+  error: null,
+  returnUrl: null,
+  lastLogin: null,
+  loginAttempts: 0
 };
 
 export const reducer = createReducer(
@@ -83,11 +89,59 @@ export const reducer = createReducer(
     error
   })),
 
+  // Update User
+  on(AuthActions.updateUserInfo, (state) => ({
+    ...state,
+    loading: true,
+    error: null
+  })),
+
+  on(AuthActions.updateUserSuccess, (state, { user }) => ({
+    ...state,
+    user,
+    loading: false,
+    error: null
+  })),
+
+  on(AuthActions.updateUserFailure, (state, { error }) => ({
+    ...state,
+    loading: false,
+    error
+  })),
+
+  // Navigation
+  on(AuthActions.setReturnURL, (state, { url }) => ({
+    ...state,
+    returnUrl: url
+  })),
+
   // Clear Error
   on(AuthActions.clearError, (state) => ({
     ...state,
+    error: null,
+  })),
+
+  on(AuthActions.resetLoginAttempts, (state) => ({
+    ...state,
+    loginAttempts: 0
+  })),
+
+  // hydrate state
+  on(AuthActions.hydrateAuthState, (state) => ({
+    ...state,
+    loading: true,
     error: null
-  }))
+  })),
+
+  on(AuthActions.hydrateAuthStateSuccess, (state, { state: hydratedState }) => ({
+    ...state,
+    ...hydratedState,
+    error: null,
+    loading: false
+  })),
+  on(AuthActions.clearAuthState, () => ({
+    ...initialState,
+  })),
 );
 
 export const authFeature = createFeature({
