@@ -1,0 +1,7 @@
+services:
+  angular-app:
+    build: .
+    ports:
+      - "4300:80"
+    environment:
+      - NODE_ENV=production
