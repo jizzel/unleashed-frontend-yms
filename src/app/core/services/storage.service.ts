@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import {STORAGE_KEYS} from '../models/storage.constants';
+import {State} from '../../features/auth/store/reducers/auth.reducer';
 
 @Injectable({
   providedIn: 'root'
@@ -14,7 +15,11 @@ export class StorageService {
 
   getItem(key: string): any {
     const storage = localStorage.getItem(key);
-    return storage ? JSON.parse(storage) : null;
+    try {
+      return storage ? JSON.parse(storage) : null;
+    } catch (e) {
+      return storage;
+    }
   }
 
   removeItem(key: string): void {
@@ -32,7 +37,21 @@ export class StorageService {
 
   // get auth state
   getAuthState(): any {
-    return this.getItem(STORAGE_KEYS.AUTH_STATE);
+    const partialAuthState: Partial<State> = {};
+    // get user
+    partialAuthState.user = this.getUserData();
+    // get tokens
+    partialAuthState.tokens = {
+      access: {
+        token: this.getAccessToken(),
+        expires: '',
+      },
+      refresh: {
+        token: this.getRefreshToken(),
+        expires: '',
+      },
+    };
+    return partialAuthState;
   }
 
   // remove auth state
@@ -56,8 +75,9 @@ export class StorageService {
   }
 
   // set access token
-  setAccessToken(value: string): void {
-    this.setItem(STORAGE_KEYS.ACCESS_TOKEN, value);
+  setAccessToken(token: string, exp: string = ''): void {
+    this.setItem(STORAGE_KEYS.ACCESS_TOKEN, token);
+    this.setItem(STORAGE_KEYS.ACCESS_EXPIRES, exp);
   }
 
   // get access token
@@ -68,11 +88,13 @@ export class StorageService {
   // remove access token
   removeAccessToken(): void {
     this.removeItem(STORAGE_KEYS.ACCESS_TOKEN);
+    this.removeItem(STORAGE_KEYS.ACCESS_EXPIRES);
   }
 
   // set refresh token
-  setRefreshToken(value: string): void {
-    this.setItem(STORAGE_KEYS.REFRESH_TOKEN, value);
+  setRefreshToken(token: string, exp: string = ''): void {
+    this.setItem(STORAGE_KEYS.REFRESH_TOKEN, token);
+    this.setItem(STORAGE_KEYS.REFRESH_EXPIRES, exp);
   }
 
   // get refresh token
@@ -83,6 +105,12 @@ export class StorageService {
   // remove refresh token
   removeRefreshToken(): void {
     this.removeItem(STORAGE_KEYS.REFRESH_TOKEN);
+    this.removeItem(STORAGE_KEYS.REFRESH_EXPIRES);
+  }
+
+  removeTokens(): void {
+    this.removeAccessToken();
+    this.removeRefreshToken();
   }
 
   // set user id

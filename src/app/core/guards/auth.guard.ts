@@ -6,7 +6,6 @@ import { map, take } from 'rxjs/operators';
 import { UserRole } from '../models/auth.interface';
 import {selectIsAuthenticated, selectUser} from '../../features/auth/store/selectors/auth.selectors';
 
-// Type for routes that require specific roles
 // Helper function to check if user has required role
 const hasRequiredRole = (userRole: UserRole, requiredRoles: UserRole[]): boolean => {
   // ADMIN role has access to everything
@@ -81,7 +80,6 @@ export const authRoleGuard: CanActivateFn = (route, state) => {
         router.navigate(['/']); // or an unauthorized page
         return false;
       }
-
       return true;
     })
   );

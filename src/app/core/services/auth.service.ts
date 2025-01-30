@@ -3,12 +3,13 @@ import { Observable } from 'rxjs';
 import { BaseApiService } from './base-api.service';
 import { LoginRequest, AuthResponse } from '../models/auth.interface';
 import {Router} from '@angular/router';
+import {StorageService} from './storage.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService extends BaseApiService<AuthResponse> {
-  constructor(private router: Router) {
+  constructor(private router: Router, private storageService: StorageService) {
     super('admins');
   }
 
@@ -21,35 +22,37 @@ export class AuthService extends BaseApiService<AuthResponse> {
   }
 
   logout(){
-    localStorage.clear();
+    this.storageService.clear();
     this.router.navigate(['/auth/login']);
     // return this.post('logout', {refresh_token: this.getRefreshToken()});
   }
 
   // Helper methods for token management
   setTokens(response: AuthResponse): void {
-    localStorage.setItem('accessToken', response.token.access.token);
-    localStorage.setItem('refreshToken', response.token.refresh.token);
-    localStorage.setItem('user', JSON.stringify(response.user));
+    this.storageService.setAccessToken(response.token.access.token, response.token.access.expires);
+    this.storageService.setRefreshToken(response.token.refresh.token, response.token.refresh.expires);
+    this.storageService.setItem('user', JSON.stringify(response.user));
   }
 
   getAccessToken(): string | null {
-    return localStorage.getItem('accessToken');
+    return this.storageService.getAccessToken();
   }
 
   getRefreshToken(): string | null {
-    return localStorage.getItem('refreshToken');
+    return this.storageService.getRefreshToken();
   }
 
   getCurrentUser(): AuthResponse['user'] | null {
-    const user = localStorage.getItem('user');
-    return user ? JSON.parse(user) : null;
+    return this.storageService.getUserData();
   }
 
   clearTokens(): void {
-    localStorage.removeItem('accessToken');
-    localStorage.removeItem('refreshToken');
-    localStorage.removeItem('user');
+    this.storageService.removeTokens();
+    this.clearUser();
+  }
+
+  clearUser(): void {
+    this.storageService.removeUserData();
   }
 
   isAuthenticated(): boolean {
