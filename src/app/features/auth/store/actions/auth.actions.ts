@@ -1,5 +1,5 @@
 import { createActionGroup, emptyProps, props } from '@ngrx/store';
-import {AuthResponse, LoginRequest, User} from '../../../../core/models/auth.interface';
+import {AuthResponse, LoginRequest, Tokens, User} from '../../../../core/models/auth.interface';
 import {ApiError} from '../../../../core/models/error.interface';
 import {State} from '../reducers/auth.reducer';
 
@@ -35,7 +35,7 @@ export const AuthActions = createActionGroup({
 
     // hydrate state
     'hydrate AuthState': emptyProps(),
-    'hydrate AuthState Success': props<{ state: Partial<State> }>(),
+    'hydrate AuthState Success': props<{ user: User, tokens: Tokens }>(),
     'hydrate AuthState Failure': emptyProps(),
 
     // Clear State

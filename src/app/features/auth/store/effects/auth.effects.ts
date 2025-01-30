@@ -80,7 +80,6 @@ export class AuthEffects {
       if (!token) {
         return AuthActions.clearAuthState();
       }
-      // const user = this.authService.getCurrentUser();
       const authState = this.storageService.getAuthState();
       return AuthActions.hydrateAuthStateSuccess(authState);
     })

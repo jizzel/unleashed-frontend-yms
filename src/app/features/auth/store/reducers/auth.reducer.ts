@@ -133,11 +133,11 @@ export const reducer = createReducer(
     error: null
   })),
 
-  on(AuthActions.hydrateAuthStateSuccess, (state, { state: hydratedState }) => ({
+  on(AuthActions.hydrateAuthStateSuccess, (state, {user, tokens}) => ({
     ...state,
-    ...hydratedState,
-    error: null,
-    loading: false
+    user,
+    tokens,
+    loading: false,
   })),
   on(AuthActions.clearAuthState, () => ({
     ...initialState,
