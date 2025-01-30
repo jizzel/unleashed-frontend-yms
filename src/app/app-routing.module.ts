@@ -11,12 +11,15 @@ import {
 } from './core/guards/auth.guard';
 
 const routes: Routes = [
+  { path: '', redirectTo: 'forms', pathMatch: 'full' },
   {
     path: 'auth',
     loadChildren: () => import('./features/auth/auth.module').then(m => m.AuthModule),
     canActivate: [noAuthGuard]
   },
-  { path: 'forms', loadChildren: () => import('./features/forms/forms.module').then(m => m.FormsModule) },
+  {
+    path: 'forms',
+    loadChildren: () => import('./features/forms/forms.module').then(m => m.FormsModule) },
   {
     path: 'admin',
     loadChildren: () => import('./features/admin/admin.module').then(m => m.AdminModule),
@@ -32,7 +35,6 @@ const routes: Routes = [
     canMatch: [userMatchGuard],
     // canActivate: [authGuard],
   },
-  { path: '', redirectTo: 'forms', pathMatch: 'full' },
   { path: '**', redirectTo: 'forms' }
 ];
 

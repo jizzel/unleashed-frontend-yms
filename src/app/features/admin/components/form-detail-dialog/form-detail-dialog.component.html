@@ -1,0 +1,105 @@
+<div class="p-6">
+  <h2 mat-dialog-title>
+    {{ data.mode === 'view' ? 'View Form Details' : 'Edit Form Details' }}
+  </h2>
+
+  <mat-dialog-content class="mat-typography">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <!-- Personal Details -->
+      <mat-card class="mb-4">
+        <mat-card-header>
+          <mat-card-title>Personal Details</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <div *ngIf="data.form.personalDetails as details">
+            <p><strong>Name:</strong> {{details.firstName}} {{details.lastName}}</p>
+            <p><strong>Email:</strong> {{details.email}}</p>
+            <p><strong>Phone:</strong> {{details.phoneNumber}}</p>
+            <p><strong>Gender:</strong> {{details.gender}}</p>
+            <p><strong>Date of Birth:</strong> {{details.dateOfBirth | date}}</p>
+          </div>
+        </mat-card-content>
+      </mat-card>
+
+      <!-- Location Details -->
+      <mat-card class="mb-4">
+        <mat-card-header>
+          <mat-card-title>Location Details</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <div *ngIf="data.form.locationDetails as details">
+            <p><strong>Address:</strong> {{details.address}}</p>
+            <p><strong>Languages:</strong> {{details.languagesSpoken.join(', ')}}</p>
+          </div>
+        </mat-card-content>
+      </mat-card>
+
+      <!-- Professional Details -->
+      <mat-card class="mb-4">
+        <mat-card-header>
+          <mat-card-title>Professional Details</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <div *ngIf="data.form.professionalDetails as details">
+            <p><strong>Occupation:</strong> {{details.occupation}}</p>
+            <p><strong>Skills:</strong> {{details.skills.join(', ')}}</p>
+          </div>
+        </mat-card-content>
+      </mat-card>
+
+      <!-- Spiritual Details -->
+      <mat-card class="mb-4">
+        <mat-card-header>
+          <mat-card-title>Spiritual Details</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <div *ngIf="data.form.spiritualDetails as details">
+            <p><strong>Born Again:</strong> {{details.bornAgain ? 'Yes' : 'No'}}</p>
+            <p><strong>Baptized:</strong> {{details.baptized ? 'Yes' : 'No'}}</p>
+            <p *ngIf="details.baptized">
+              <strong>Baptism Type:</strong> {{details.baptismType}}
+            </p>
+          </div>
+        </mat-card-content>
+      </mat-card>
+
+      <!-- Emergency Contact -->
+      <mat-card class="mb-4">
+        <mat-card-header>
+          <mat-card-title>Emergency Contact</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <div *ngIf="data.form.emergencyContact as contact">
+            <p><strong>Name:</strong> {{contact.name}}</p>
+            <p><strong>Relationship:</strong> {{contact.relationship}}</p>
+            <p><strong>Phone:</strong> {{contact.phoneNumber}}</p>
+          </div>
+        </mat-card-content>
+      </mat-card>
+
+      <!-- Additional Info -->
+      <mat-card class="mb-4 md:col-span-2">
+        <mat-card-header>
+          <mat-card-title>Additional Information</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <mat-form-field class="w-full" *ngIf="data.mode === 'edit'">
+            <mat-label>Additional Info</mat-label>
+            <textarea matInput [(ngModel)]="editedForm.additionalInfo"
+                      rows="4"></textarea>
+          </mat-form-field>
+          <p *ngIf="data.mode === 'view'">{{data.form.additionalInfo}}</p>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </mat-dialog-content>
+
+  <mat-dialog-actions align="end">
+    <button mat-button mat-dialog-close>Cancel</button>
+    <button mat-raised-button color="primary"
+            *ngIf="data.mode === 'edit'"
+            (click)="save()">
+      Save Changes
+    </button>
+  </mat-dialog-actions>
+</div>
