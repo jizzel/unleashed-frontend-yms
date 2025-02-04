@@ -16,7 +16,7 @@ export class StorageService {
   getItem(key: string): any {
     const storage = localStorage.getItem(key);
     try {
-      return storage ? JSON.parse(storage) : null;
+      return storage ? JSON.parse(JSON.parse(storage)) : null;
     } catch (e) {
       return storage;
     }
@@ -32,7 +32,7 @@ export class StorageService {
 
   // set auth state
   setAuthState(value: any): void {
-    this.setItem(STORAGE_KEYS.AUTH_STATE, JSON.stringify(value));
+    this.setItem(STORAGE_KEYS.AUTH_STATE, value);
   }
 
   // get auth state
@@ -61,7 +61,7 @@ export class StorageService {
 
   // set user
   setUserData(value: any): void {
-    this.setItem(STORAGE_KEYS.USER, JSON.stringify(value));
+    this.setItem(STORAGE_KEYS.USER, value);
   }
 
   // get user

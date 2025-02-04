@@ -31,7 +31,7 @@ export class AuthService extends BaseApiService<AuthResponse> {
   setTokens(response: AuthResponse): void {
     this.storageService.setAccessToken(response.token.access.token, response.token.access.expires);
     this.storageService.setRefreshToken(response.token.refresh.token, response.token.refresh.expires);
-    this.storageService.setItem('user', JSON.stringify(response.user));
+    this.storageService.setItem('user', response.user);
   }
 
   getAccessToken(): string | null {
