@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import {STORAGE_KEYS} from '../models/storage.constants';
 import {State} from '../../features/auth/store/reducers/auth.reducer';
+import {User} from '../models/auth.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -16,7 +17,7 @@ export class StorageService {
   getItem(key: string): any {
     const storage = localStorage.getItem(key);
     try {
-      return storage ? JSON.parse(JSON.parse(storage)) : null;
+      return storage ? JSON.parse(storage) : null;
     } catch (e) {
       return storage;
     }
@@ -65,8 +66,8 @@ export class StorageService {
   }
 
   // get user
-  getUserData(): any {
-    return this.getItem(STORAGE_KEYS.USER);
+  getUserData(): User {
+    return this.getItem(STORAGE_KEYS.USER) as User;
   }
 
   // remove user
