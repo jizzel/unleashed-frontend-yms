@@ -1,6 +1,11 @@
 import { createFeature, createReducer, on } from '@ngrx/store';
 import { AdminActions } from '../actions/admin.actions';
-import {AdminUser, AuditLogResponse, DashboardResponse, Form} from '../../../../core/models/admin.interface';
+import {
+  AuditLogResponse,
+  DashboardResponse,
+  Form,
+  UsersResponse
+} from '../../../../core/models/admin.interface';
 
 export const adminFeatureKey = 'admin';
 
@@ -11,7 +16,7 @@ export interface State {
     error: any;
   };
   adminUsers: {
-    data: AdminUser[];
+    data: UsersResponse | null;
     loading: boolean;
     error: any;
   };
@@ -34,7 +39,7 @@ export const initialState: State = {
     error: null
   },
   adminUsers: {
-    data: [],
+    data: null,
     loading: false,
     error: null
   },
@@ -71,9 +76,9 @@ export const reducer = createReducer(
     ...state,
     adminUsers: { ...state.adminUsers, loading: true, error: null }
   })),
-  on(AdminActions.loadAdminUsersSuccess, (state, { users }): State => ({
+  on(AdminActions.loadAdminUsersSuccess, (state, { response }): State => ({
     ...state,
-    adminUsers: { data: users, loading: false, error: null }
+    adminUsers: { data: response, loading: false, error: null }
   })),
   on(AdminActions.loadAdminUsersFailure, (state, { error }): State => ({
     ...state,
