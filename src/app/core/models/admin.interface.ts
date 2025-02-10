@@ -9,6 +9,11 @@ export interface DashboardResponse {
   meta: PaginationMeta;
 }
 
+export interface UsersResponse {
+  items: AdminUser[];
+  meta: PaginationMeta;
+}
+
 export interface Form {
   id: string;
   userId: string;

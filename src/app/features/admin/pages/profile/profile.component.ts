@@ -1,6 +1,9 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, inject, OnInit} from '@angular/core';
 import {Observable} from 'rxjs';
-import {AdminUser, UserRole} from '../../../../core/models/admin.interface';
+import {
+  UserRole,
+  UsersResponse
+} from '../../../../core/models/admin.interface';
 import {Store} from '@ngrx/store';
 import {AdminActions} from '../../store/actions/admin.actions';
 import {selectAdminUsers} from '../../store/selectors/admin.selectors';
@@ -13,15 +16,23 @@ import {selectAdminUsers} from '../../store/selectors/admin.selectors';
   styleUrl: './profile.component.css'
 })
 export class ProfileComponent implements OnInit{
-  adminUsers$: Observable<AdminUser[]>;
+  store = inject(Store);
+  adminUsers$: Observable<UsersResponse | null>;
   displayedColumns = ['name', 'email', 'role'];
 
-  constructor(private store: Store<any>) {
+  filters = {
+    role: UserRole.USER,
+    page: 1,
+    limit: 10,
+    search: ''
+  };
+
+  constructor() {
     this.adminUsers$ = this.store.select(selectAdminUsers);
   }
 
   ngOnInit() {
-    this.store.dispatch(AdminActions.loadAdminUsers());
+    this.loadUsers();
   }
 
   registerAdmin(data: { firstName: string; email: string }) {
@@ -30,5 +41,16 @@ export class ProfileComponent implements OnInit{
 
   updateRole(userId: string, role: UserRole) {
     this.store.dispatch(AdminActions.updateAdminRole({ userId, role }));
+  }
+
+  loadUsers(){
+    this.store.dispatch(AdminActions.loadAdminUsers({...this.filters}));
+  }
+
+  onPageChange($event: any) {
+    this.filters.page = $event.pageIndex + 1;
+    this.filters.limit = $event.pageSize;
+    this.loadUsers();
+
   }
 }

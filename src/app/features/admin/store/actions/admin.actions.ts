@@ -1,5 +1,12 @@
 import { createActionGroup, emptyProps, props } from '@ngrx/store';
-import {AdminUser, AuditLogResponse, DashboardResponse, Form, UserRole} from '../../../../core/models/admin.interface';
+import {
+  AdminUser,
+  AuditLogResponse,
+  DashboardResponse,
+  Form,
+  UserRole,
+  UsersResponse
+} from '../../../../core/models/admin.interface';
 
 export const AdminActions = createActionGroup({
   source: 'admin',
@@ -13,8 +20,13 @@ export const AdminActions = createActionGroup({
     'Load Dashboard Success': props<{ response: DashboardResponse }>(),
     'Load Dashboard Failure': props<{ error: any }>(),
 
-    'Load Admin Users': emptyProps(),
-    'Load Admin Users Success': props<{ users: AdminUser[] }>(),
+    'Load Admin Users': props<{
+      role?: string;
+      page?: number;
+      limit?: number;
+      search?: string;
+    }>(),
+    'Load Admin Users Success': props<{ response: UsersResponse }>(),
     'Load Admin Users Failure': props<{ error: any }>(),
 
     'Register Admin': props<{ firstName: string; email: string; }>(),

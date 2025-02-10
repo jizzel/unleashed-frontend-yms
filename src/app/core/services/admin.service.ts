@@ -7,7 +7,7 @@ import {
   Form,
   AdminUser,
   AuditLogResponse,
-  UserRole
+  UserRole, UsersResponse
 } from '../models/admin.interface';
 
 @Injectable({
@@ -27,8 +27,13 @@ export class AdminService extends BaseApiService<any> {
     return this.get('dashboard', params);
   }
 
-  getAdminUsers(): Observable<AdminUser[]> {
-    return this.get('users');
+  getAdminUsers(params?: {
+    role?: string;
+    page?: number;
+    limit?: number;
+    search?: string;
+  }): Observable<UsersResponse> {
+    return this.get('users', params);
   }
 
   registerAdmin(data: {

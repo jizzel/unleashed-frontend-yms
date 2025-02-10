@@ -23,13 +23,14 @@ export class AdminEffects {
 
   loadAdminUsers$ = createEffect(() => this.actions$.pipe(
     ofType(AdminActions.loadAdminUsers),
-    mergeMap(() =>
-      this.adminService.getAdminUsers().pipe(
-        map(users => AdminActions.loadAdminUsersSuccess({ users })),
+    mergeMap(({ role, page, limit, search }) =>
+      this.adminService.getAdminUsers({ role, page, limit, search }).pipe(
+        map(response => AdminActions.loadAdminUsersSuccess({ response })),
         catchError(error => of(AdminActions.loadAdminUsersFailure({ error })))
       )
     )
   ));
+
 
   registerAdmin$ = createEffect(() => this.actions$.pipe(
     ofType(AdminActions.registerAdmin),
